@@ -42,6 +42,7 @@ ENDIF()
 ADD_LIBRARY(MuonProcessors SHARED
         ./src/MuonRecoStandAlone.cc
 	./src/Analyzer.cc
+	./src/Analyzer_new.cc
 	)
 TARGET_INCLUDE_DIRECTORIES(MuonProcessors
   PUBLIC
