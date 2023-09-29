@@ -44,7 +44,7 @@ Analyzer_new::Analyzer_new() : Processor("Analyzer_new") {
 			      m_rootFileName,
 			      std::string("MuonAnalyzer.root"));
   
-  registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
+  /*registerInputCollection( LCIO::RECONSTRUCTEDPARTICLE,
 			   "RECOParticleCollectionName",
 			   "Name of the RECOParticle input collection",
 			   m_inputRECOParticleCollection,
@@ -54,7 +54,7 @@ Analyzer_new::Analyzer_new() : Processor("Analyzer_new") {
 			   "RECOClusterCollectionName",
 			   "Name of the RECOCluster input collection",
 			   m_inputRECOClusterCollection,
-			   std::string("PandoraClusters"));
+			   std::string("PandoraClusters"));*/
 
   registerInputCollection( LCIO::TRACK,
 			   "CTCollectionName",
@@ -92,7 +92,7 @@ void Analyzer_new::init() {
   _magneticField = MarlinUtil::getBzAtOrigin();
 
   //CLUSTER-->PandoraCluster
-  m_E_pfoclus	= new std::vector<float>(); 
+  /*m_E_pfoclus	= new std::vector<float>(); 
   m_x_pfoclus	= new std::vector<float>(); 
   m_y_pfoclus	= new std::vector<float>(); 
   m_z_pfoclus	= new std::vector<float>(); 
@@ -111,7 +111,7 @@ void Analyzer_new::init() {
   m_py_pfopart	= new std::vector<float>(); 
   m_pz_pfopart	= new std::vector<float>(); 
   m_dR_pfopart	= new std::vector<float>(); 
-  m_flag_pfopart = new std::vector<int>();
+  m_flag_pfopart = new std::vector<int>();*/
   
   //MCPARTICLE  
   m_mcpPDGID = new std::vector<int>(); 
@@ -142,9 +142,10 @@ void Analyzer_new::init() {
   m_x_SAclus->clear(); 
   m_y_SAclus->clear(); 
   m_z_SAclus->clear(); 
-  m_nhitstot_SAclus->clear(); 
+  m_nhitstot_SAclus->clear();
   m_phi_SAclus->clear(); 	
-  m_theta_SAclus->clear(); 
+  m_theta_SAclus->clear();
+  
   m_clus_layer.clear();
   m_clus_system.clear();
   m_clus_side.clear();
@@ -171,7 +172,7 @@ void Analyzer_new::init() {
   m_mcpPz  ->clear(); 
   m_mcpTime  ->clear();
   
-  m_E_pfoclus->clear(); 
+  /*m_E_pfoclus->clear(); 
   m_x_pfoclus->clear(); 
   m_y_pfoclus->clear(); 
   m_z_pfoclus->clear(); 
@@ -188,7 +189,7 @@ void Analyzer_new::init() {
   m_py_pfopart->clear(); 
   m_pz_pfopart->clear();
   m_dR_pfopart->clear();
-  m_flag_pfopart->clear();
+  m_flag_pfopart->clear();*/
   
 
   // Branch creation  
@@ -199,7 +200,7 @@ void Analyzer_new::init() {
   m_outputTree->Branch("mcpPz","std::vector< float >", &m_mcpPz);
   m_outputTree->Branch("mcpTime","std::vector< float >", &m_mcpTime);
   
-  m_outputTree->Branch("E_pfoclus","std::vector<float>",&m_E_pfoclus);
+  /*m_outputTree->Branch("E_pfoclus","std::vector<float>",&m_E_pfoclus);
   m_outputTree->Branch("x_pfoclus","std::vector<float>",&m_x_pfoclus);
   m_outputTree->Branch("y_pfoclus","std::vector<float>",&m_y_pfoclus);
   m_outputTree->Branch("z_pfoclus","std::vector<float>",&m_z_pfoclus);
@@ -217,7 +218,7 @@ void Analyzer_new::init() {
   m_outputTree->Branch("pz_pfopart","std::vector<float>",&m_pz_pfopart);
   m_outputTree->Branch("type_pfopart","std::vector<float>",&m_type_pfopart);
   m_outputTree->Branch("dR_pfopart","std::vector<float>",&m_dR_pfopart);
-  m_outputTree->Branch("flag_pfopart","std::vector<int>",&m_flag_pfopart);
+  m_outputTree->Branch("flag_pfopart","std::vector<int>",&m_flag_pfopart);*/
     
   m_outputTree->Branch("m_E_SAclus","std::vector<float>",&m_E_SAclus); 
   m_outputTree->Branch("m_x_SAclus","std::vector<float>",&m_x_SAclus); 
@@ -231,6 +232,7 @@ void Analyzer_new::init() {
   m_outputTree->Branch("m_trkTheta","std::vector<float>",&m_trkTheta);
   m_outputTree->Branch("m_trkPhi","std::vector<float>",&m_trkPhi);
   m_outputTree->Branch("m_trkCharge","std::vector<float>",&m_trkCharge);
+  
   m_outputTree->Branch("clus_layer","std::vector< std::vector<int >>", &m_clus_layer);
   m_outputTree->Branch("clus_system","std::vector< std::vector<int >>", &m_clus_system);
   m_outputTree->Branch("clus_side","std::vector< std::vector<int >>", &m_clus_side);
@@ -294,7 +296,7 @@ void Analyzer_new::processEvent( LCEvent* evt ) {
   m_mcpPz  ->clear(); 
   m_mcpTime  ->clear();
   
-  m_E_pfoclus->clear(); 
+  /*m_E_pfoclus->clear(); 
   m_x_pfoclus->clear(); 
   m_y_pfoclus->clear(); 
   m_z_pfoclus->clear(); 
@@ -312,7 +314,7 @@ void Analyzer_new::processEvent( LCEvent* evt ) {
   m_py_pfopart->clear(); 
   m_pz_pfopart->clear();
   m_dR_pfopart->clear();
-  m_flag_pfopart->clear();
+  m_flag_pfopart->clear();*/
 
   //=================
   //MCParticle
@@ -367,7 +369,7 @@ void Analyzer_new::processEvent( LCEvent* evt ) {
   
   //RECONSTRUCTEDPARTICLE-->PandoraPFOs
   //Track* track;
-  Cluster* cluster;
+  /*Cluster* cluster;
   ReconstructedParticle* pandorapart;
   int traccia=0;
   LCCollection* recoparticlecol = NULL;
@@ -441,7 +443,7 @@ void Analyzer_new::processEvent( LCEvent* evt ) {
     }//end PandoraParticles loop
   } //end if  PandoraParticles loop
       std::cout << "Pandora fatte" <<std::endl;
-
+  */
   //=================
       //==================
 
