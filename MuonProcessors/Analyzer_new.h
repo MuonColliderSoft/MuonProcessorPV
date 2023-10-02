@@ -125,7 +125,23 @@ protected:
   std::vector<std::vector<float>> m_clus_energy;
   std::vector<std::vector<float>> m_clus_x;
   std::vector<std::vector<float>> m_clus_y;
-  std::vector<std::vector<float>> m_clus_z;
+  std::vector<std::vector<float>> m_clus_z;  
+  
+  
+  std::vector<float>* m_Muon_E= NULL;
+  std::vector<float>* m_Muon_x=NULL;
+  std::vector<float>* m_Muon_y=NULL;
+  std::vector<float>* m_Muon_z=NULL;
+  std::vector<float>* m_Muon_time=NULL;
+  std::vector<int>* m_Muon_ID_layer=NULL;
+  std::vector<int>* m_Muon_ID_system=NULL;
+  std::vector<int>* m_Muon_ID_module=NULL;
+  std::vector<int>* m_Muon_ID_stave=NULL;
+  std::vector<int>* m_Muon_ID_submodule=NULL;
+  std::vector<int>* m_Muon_ID_side=NULL;
+  std::vector<int>* m_Muon_ID_x=NULL;
+  std::vector<int>* m_Muon_ID_y=NULL;
+
 
   // Call to get collections
   void getCollection(LCCollection*&, std::string, LCEvent*);

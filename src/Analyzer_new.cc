@@ -136,6 +136,21 @@ void Analyzer_new::init() {
   m_trkPhi = new std::vector<float>();
   m_trkCharge = new std::vector<float>();
   
+  //MUON
+  m_Muon_E   = new std::vector<float>(); 
+  m_Muon_x  = new std::vector<float>(); 
+  m_Muon_y  = new std::vector<float>(); 
+  m_Muon_z  = new std::vector<float>(); 
+  m_Muon_time  = new std::vector<float>(); 
+  m_Muon_ID_layer    = new std::vector<int>(); 
+  m_Muon_ID_system   = new std::vector<int>(); 
+  m_Muon_ID_module   = new std::vector<int>(); 
+  m_Muon_ID_stave    = new std::vector<int>(); 
+  m_Muon_ID_submodule= new std::vector<int>(); 
+  m_Muon_ID_side     = new std::vector<int>(); 
+  m_Muon_ID_x	   = new std::vector<int>(); 
+  m_Muon_ID_y	   = new std::vector<int>(); 
+  
   
   //Initialization
   m_E_SAclus->clear();   
@@ -191,6 +206,19 @@ void Analyzer_new::init() {
   m_dR_pfopart->clear();
   m_flag_pfopart->clear();*/
   
+  m_Muon_E ->clear(); 
+  m_Muon_x ->clear(); 
+  m_Muon_y ->clear(); 
+  m_Muon_z ->clear();
+  m_Muon_time ->clear(); 
+  m_Muon_ID_layer ->clear();   
+  m_Muon_ID_system ->clear(); 
+  m_Muon_ID_module ->clear();  
+  m_Muon_ID_stave ->clear();   
+  m_Muon_ID_submodule ->clear();
+  m_Muon_ID_side ->clear();   
+  m_Muon_ID_x->clear();	 
+  m_Muon_ID_y->clear();	 
 
   // Branch creation  
   m_outputTree->Branch("mcpPDGID","std::vector< int >", &m_mcpPDGID);
@@ -246,7 +274,20 @@ void Analyzer_new::init() {
   m_outputTree->Branch("clus_x","std::vector< std::vector<float>>", &m_clus_x);
   m_outputTree->Branch("clus_y","std::vector< std::vector<float>>", &m_clus_y);
   m_outputTree->Branch("clus_z","std::vector< std::vector<float>>", &m_clus_z);
-
+  
+  m_outputTree->Branch("MuonE",  "std::vector< float >", &m_Muon_E); 
+  m_outputTree->Branch("Muonx", "std::vector< float >", &m_Muon_x); 
+  m_outputTree->Branch("Muony", "std::vector< float >", &m_Muon_y); 
+  m_outputTree->Branch("Muonz", "std::vector< float >", &m_Muon_z); 
+  m_outputTree->Branch("Muontime", "std::vector< float >", &m_Muon_time); 
+  m_outputTree->Branch("Muon_ID_layer",  "std::vector< int >",    &m_Muon_ID_layer);
+  m_outputTree->Branch("Muon_ID_system",  "std::vector< int >",   &m_Muon_ID_system);  
+  m_outputTree->Branch("Muon_ID_module",  "std::vector< int >",    &m_Muon_ID_module);
+  m_outputTree->Branch("Muon_ID_submodule",  "std::vector< int >",   &m_Muon_ID_submodule);
+  m_outputTree->Branch("Muon_ID_stave",  "std::vector< int >",   &m_Muon_ID_stave);
+  m_outputTree->Branch("Muon_ID_side",  "std::vector< int >",   &m_Muon_ID_side);
+  m_outputTree->Branch("Muon_ID_x",  "std::vector< int >",   &m_Muon_ID_x);
+  m_outputTree->Branch("Muon_ID_y",  "std::vector< int >",   &m_Muon_ID_y);
 }
 
 
@@ -295,6 +336,21 @@ void Analyzer_new::processEvent( LCEvent* evt ) {
   m_mcpPy  ->clear(); 
   m_mcpPz  ->clear(); 
   m_mcpTime  ->clear();
+  
+  m_Muon_E ->clear(); 
+  m_Muon_x ->clear(); 
+  m_Muon_y ->clear(); 
+  m_Muon_z ->clear();
+  m_Muon_time ->clear(); 
+  m_Muon_ID_layer ->clear();   
+  m_Muon_ID_system ->clear(); 
+  m_Muon_ID_module ->clear();  
+  m_Muon_ID_stave ->clear();   
+  m_Muon_ID_submodule ->clear();
+  m_Muon_ID_side ->clear();   
+  m_Muon_ID_x->clear();	 
+  m_Muon_ID_y->clear();	 
+
   
   /*m_E_pfoclus->clear(); 
   m_x_pfoclus->clear(); 
@@ -519,6 +575,41 @@ void Analyzer_new::processEvent( LCEvent* evt ) {
       }
       
     }
+    
+    
+     if(muons!=NULL){
+     UTIL::BitField64 b(muons->getParameters().getStringVal( EVENT::LCIO::CellIDEncoding ));
+     for(int i=0;i<muons->getNumberOfElements();i++){
+ 	 CalorimeterHit* muon = dynamic_cast<CalorimeterHit*>(muons->getElementAt(i));
+	 const CHT cht(muon->getType());
+	 lcio::long64 val = lcio::long64( muon->getCellID0() & 0xffffffff ) 
+	 |	  ( lcio::long64( muon->getCellID1() ) << 32) ;
+	 //BitField64 b("system:5,side:-2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16" ) ;
+    	 b.setValue(val);
+     	 unsigned int layer = b["layer"]  ;
+	 unsigned int system = b["system"]  ;
+	 unsigned int side = b["side"]  ;
+	 unsigned int module = b["module"]  ;
+	 unsigned int stave = b["stave"]  ;
+	 unsigned int submodule = b["submodule"]  ;
+	 unsigned int x = b["x"]  ;
+	 unsigned int y = b["y"]  ;
+         m_Muon_E->push_back(muon->getEnergy());
+	 m_Muon_x->push_back(muon->getPosition()[0]);
+	 m_Muon_y->push_back(muon->getPosition()[1]);
+	 m_Muon_z->push_back(muon->getPosition()[2]);
+	 m_Muon_time->push_back(muon->getTime());
+	 m_Muon_ID_layer->push_back(layer);
+	 m_Muon_ID_system->push_back(system);
+	 m_Muon_ID_side->push_back(side);
+	 m_Muon_ID_module->push_back(module);
+	 m_Muon_ID_stave->push_back(stave);
+	 m_Muon_ID_submodule->push_back(submodule);
+	 m_Muon_ID_x->push_back(x);
+	 m_Muon_ID_y->push_back(y);
+       }
+     }
+    
   } 
 
   m_outputTree->Fill();
