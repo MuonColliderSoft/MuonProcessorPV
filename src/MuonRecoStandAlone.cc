@@ -272,7 +272,7 @@ void MuonRecoStandAlone::processEvent( LCEvent* evt ) {
   if(m_trk_flag>0){
   for(unsigned int icol=0; icol<inputHitColls.size(); ++icol){
     //aggiunta per protezione GROSSO RISCHIO
-    if (outputTrackerHitColls[icol]->size()>30) continue;
+    if (outputTrackerHitColls[icol]->size()>30){std::cout << "Not adding collections to event because size is " << outputTrackerHitColls[icol]->size() << std::endl;       continue;}
     evt->addCollection( outputTrackerHitColls[icol], m_outputTrackerHitPlaneCollNames[icol] ) ;
     }
   }
