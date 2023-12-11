@@ -242,7 +242,7 @@ void MuonRecoStandAlone::processEvent( LCEvent* evt ) {
 	
 	float deltaR_trackerhit=trackerhit.DeltaR(cl_center);
 	if ( deltaR_trackerhit < m_cutdRTracker){
-	  numerohit_check++;
+	  numerohit_check = numerohit_check +1;
 	  TrackerHitPlaneImpl* hitplane_new = new TrackerHitPlaneImpl();
 	  hitplane_new->setCellID0(hitplane->getCellID0());
 	  hitplane_new->setCellID1(hitplane->getCellID1());
