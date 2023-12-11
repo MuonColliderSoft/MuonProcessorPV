@@ -263,7 +263,8 @@ void MuonRecoStandAlone::processEvent( LCEvent* evt ) {
 	  // hitplane_new->setProducedBySecondary(hitplane->isProducedBySecondary());
 	  if (numerohit_check<30) outputTrackerHitColls[icol]->addElement(hitplane_new);
 	  }
-      } // ihit loop      
+      } // ihit loop  
+      std::cout << "numero hit check " <<   numerohit_check  << std::endl;
     } // icol loop
     } //close if trk_flag
   } //end loop hits on first layer
