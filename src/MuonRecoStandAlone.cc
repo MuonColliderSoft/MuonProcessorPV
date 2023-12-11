@@ -233,6 +233,7 @@ void MuonRecoStandAlone::processEvent( LCEvent* evt ) {
     for (unsigned int icol=0; icol<inputHitColls.size(); ++icol){
       LCCollection* hit_col  =  inputHitColls[icol];
       if( !hit_col ) continue ;
+      int numerohit_check = 0; //AGGIUNTA GROSSO RISCHIO
       for (int ihit=0; ihit<hit_col->getNumberOfElements(); ++ihit){
 	TrackerHitPlane* hitplane = dynamic_cast<TrackerHitPlane*>(hit_col->getElementAt(ihit));
 	
@@ -241,6 +242,7 @@ void MuonRecoStandAlone::processEvent( LCEvent* evt ) {
 	
 	float deltaR_trackerhit=trackerhit.DeltaR(cl_center);
 	if ( deltaR_trackerhit < m_cutdRTracker){
+	  numerohit_check++;
 	  TrackerHitPlaneImpl* hitplane_new = new TrackerHitPlaneImpl();
 	  hitplane_new->setCellID0(hitplane->getCellID0());
 	  hitplane_new->setCellID1(hitplane->getCellID1());
@@ -259,7 +261,7 @@ void MuonRecoStandAlone::processEvent( LCEvent* evt ) {
 	  hitplane_new->setdV(hitplane->getdV());
 	  //hitplane_new->setOverlay(hitplane->isOverlay());
 	  // hitplane_new->setProducedBySecondary(hitplane->isProducedBySecondary());
-	  outputTrackerHitColls[icol]->addElement(hitplane_new);
+	  if (numerohit_check<30) outputTrackerHitColls[icol]->addElement(hitplane_new);
 	  }
       } // ihit loop      
     } // icol loop
@@ -272,7 +274,7 @@ void MuonRecoStandAlone::processEvent( LCEvent* evt ) {
   if(m_trk_flag>0){
   for(unsigned int icol=0; icol<inputHitColls.size(); ++icol){
     //aggiunta per protezione GROSSO RISCHIO
-    if (outputTrackerHitColls[icol]->size()>30){std::cout << "Not adding collections to event because size is " << outputTrackerHitColls[icol]->size() << std::endl;       continue;}
+    //if (outputTrackerHitColls[icol]->size()>30){std::cout << "Not adding collections to event because size is " << outputTrackerHitColls[icol]->size() << std::endl;       continue;}
     evt->addCollection( outputTrackerHitColls[icol], m_outputTrackerHitPlaneCollNames[icol] ) ;
     }
   }
